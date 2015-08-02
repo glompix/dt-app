@@ -22,8 +22,11 @@ gulp.task('watch', function() {
 });
 
 gulp.task('browserify', function () {
-  gulp.src(['./client/client.js'])
-   .pipe(browserify())
+  var b = browserify();
+  b.transform(reactify);
+  b.add('./client/client.js');
+  return b.bundle()
+   .pipe(source('./client/client.js'))
    .pipe(gulp.dest('./public/js'));
 });
 
