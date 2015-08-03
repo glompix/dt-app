@@ -1,18 +1,9 @@
 var Router = require('react-router');
 var Route = Router.Route;
 var RouteHandler = Router.RouteHandler;
-
-// declare our routes and their hierarchy
-var routes = (
-  <Route handler={App}>
-    <Route path="home" handler={HomePage}></Route>
-    <Route path="employer" handler={Set}>
-      <Route path=":id" handler={View}>
-        <Route path="configure" handler={Configure}></Route>
-      </Route>
-    </Route>
-  </Route>
-);
+var DefaultRoute = Router.DefaultRoute;
+var NotFoundRoute = Router.NotFoundRoute;
+var Location = Router.HashLocation;
 
 var App = React.createClass({
   render: function () {
@@ -25,6 +16,34 @@ var App = React.createClass({
   }
 });
 
-Router.run(routes, Router.HashLocation, function (Root) {
+var HomePage = React.createClass({
+  render: function () {
+    return (
+      <div>
+        <h2>Home</h2>
+      </div>
+    );
+  }
+});
+
+var NotFound = React.createClass({
+  render: function () {
+    return (
+      <div>
+        <h2>NotFound</h2>
+      </div>
+    );
+  }
+});
+
+// declare our routes and their hierarchy
+var routes = (
+  <Route handler={App} path="/">
+    <DefaultRoute handler={HomePage} />
+    <NotFoundRoute handler={NotFound} />
+  </Route>
+);
+
+Router.run(routes, Location, function (Root) {
   React.render(<Root/>, document.getElementById("__APP_BODY"));
 });

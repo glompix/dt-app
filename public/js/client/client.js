@@ -2,18 +2,9 @@
 var Router = require('react-router');
 var Route = Router.Route;
 var RouteHandler = Router.RouteHandler;
-
-// declare our routes and their hierarchy
-var routes = (
-  React.createElement(Route, {handler: App}, 
-    React.createElement(Route, {path: "home", handler: HomePage}), 
-    React.createElement(Route, {path: "employer", handler: Set}, 
-      React.createElement(Route, {path: ":id", handler: View}, 
-        React.createElement(Route, {path: "configure", handler: Configure})
-      )
-    )
-  )
-);
+var DefaultRoute = Router.DefaultRoute;
+var NotFoundRoute = Router.NotFoundRoute;
+var Location = Router.HashLocation;
 
 var App = React.createClass({displayName: "App",
   render: function () {
@@ -26,7 +17,35 @@ var App = React.createClass({displayName: "App",
   }
 });
 
-Router.run(routes, Router.HashLocation, function (Root) {
+var HomePage = React.createClass({displayName: "HomePage",
+  render: function () {
+    return (
+      React.createElement("div", null, 
+        React.createElement("h2", null, "Home")
+      )
+    );
+  }
+});
+
+var NotFound = React.createClass({displayName: "NotFound",
+  render: function () {
+    return (
+      React.createElement("div", null, 
+        React.createElement("h2", null, "NotFound")
+      )
+    );
+  }
+});
+
+// declare our routes and their hierarchy
+var routes = (
+  React.createElement(Route, {handler: App, path: "/"}, 
+    React.createElement(DefaultRoute, {handler: HomePage}), 
+    React.createElement(NotFoundRoute, {handler: NotFound})
+  )
+);
+
+Router.run(routes, Location, function (Root) {
   React.render(React.createElement(Root, null), document.getElementById("__APP_BODY"));
 });
 },{"react-router":27}],2:[function(require,module,exports){
